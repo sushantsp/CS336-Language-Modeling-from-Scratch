@@ -1,6 +1,50 @@
-# CS336-Language-Modeling-from-Scratch
-Repo contains the Notes and assignements from CS336 stanford class. Intentions is replicate exercises to get better understanding of LLMs and go beyond just the theoretical understanding of Language Models. This is my attempt at passing CS336 offline.
+# CS336 Spring 2025 Assignment 1: Basics
+
+For a full description of the assignment, see the assignment handout at
+[cs336_spring2025_assignment1_basics.pdf](./cs336_spring2025_assignment1_basics.pdf)
+
+If you see any issues with the assignment handout or code, please feel free to
+raise a GitHub issue or open a pull request with a fix.
+
+## Setup
+
+### Environment
+We manage our environments with `uv` to ensure reproducibility, portability, and ease of use.
+Install `uv` [here](https://github.com/astral-sh/uv) (recommended), or run `pip install uv`/`brew install uv`.
+We recommend reading a bit about managing projects in `uv` [here](https://docs.astral.sh/uv/guides/projects/#managing-dependencies) (you will not regret it!).
+
+You can now run any code in the repo using
+```sh
+uv run <python_file_path>
+```
+and the environment will be automatically solved and activated when necessary.
+
+### Run unit tests
 
 
-### What is this course about?
-Language models serve as the cornerstone of modern natural language processing (NLP) applications and open up a new paradigm of having a single general purpose system address a range of downstream tasks. As the field of artificial intelligence (AI), machine learning (ML), and NLP continues to grow, possessing a deep understanding of language models becomes essential for scientists and engineers alike. This course is designed to provide students with a comprehensive understanding of language models by walking them through the entire process of developing their own. Drawing inspiration from operating systems courses that create an entire operating system from scratch, we will lead students through every aspect of language model creation, including data collection and cleaning for pre-training, transformer model construction, model training, and evaluation before deployment.
+```sh
+uv run pytest
+```
+
+Initially, all tests should fail with `NotImplementedError`s.
+To connect your implementation to the tests, complete the
+functions in [./tests/adapters.py](./tests/adapters.py).
+
+### Download data
+Download the TinyStories data and a subsample of OpenWebText
+
+``` sh
+mkdir -p data
+cd data
+
+wget https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStoriesV2-GPT4-train.txt
+wget https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStoriesV2-GPT4-valid.txt
+
+wget https://huggingface.co/datasets/stanford-cs336/owt-sample/resolve/main/owt_train.txt.gz
+gunzip owt_train.txt.gz
+wget https://huggingface.co/datasets/stanford-cs336/owt-sample/resolve/main/owt_valid.txt.gz
+gunzip owt_valid.txt.gz
+
+cd ..
+```
+
