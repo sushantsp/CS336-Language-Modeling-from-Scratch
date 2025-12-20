@@ -77,6 +77,10 @@ def merge(old_tokens, top_pair) -> list[list[bytes]]:
 
 def train_bpe(text: str, special_tokens:list[str], vocab_size:int):
 
+    # Remove special tokens from the text
+    for token in special_tokens:
+        text = text.replace(token, "")
+
     vocab = init_vocab(special_tokens)
     # initial merges - ordered from earliest-created to latest
     merges = []
@@ -93,8 +97,18 @@ def train_bpe(text: str, special_tokens:list[str], vocab_size:int):
 
         freq_pair_cnt = get_pair_freq_counts(tokens)
 
-        # Get the top pair - making sure we have lexicographical order taken into consideration
-        top_pair, count = max(freq_pair_cnt.items(), key = lambda x: (x[1], x[0])) # evaulate by count and pair. first count then pair to break a tie in case of 
+        # Add check for empty frequency counts
+        if not freq_pair_cnt:
+            logger.warning("No more pairs to merge - stopping early")
+            break
+        
+        try:
+            # Get the top pair - making sure we have lexicographical order taken into consideration
+            top_pair, count = max(freq_pair_cnt.items(), key = lambda x: (x[1], x[0])) # evaulate by count and pair. first count then pair to break a tie in case of 
+
+        except ValueError as e:
+            logger.error(f"Error finding max pair: {e}")
+            break
 
         logger.info(f"top pair selected is {top_pair}")
         # update tokens
