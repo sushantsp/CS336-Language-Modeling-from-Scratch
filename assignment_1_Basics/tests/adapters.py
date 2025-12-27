@@ -594,12 +594,18 @@ def run_train_bpe(
     with open(input_path, 'r', encoding='utf-8') as f:
         text = f.read()
 
-    return train_bpe(text, special_tokens, vocab_size)
+    return train_bpe(text, special_tokens, vocab_size, **kwargs)
 
 
-if __name__ == '__main__':
-    run_train_bpe(
-        input_path=r'D:\Courses and books\cs336\assignment1-basics\data\temp.txt',
-        vocab_size=290,
-        special_tokens=['<|endoftext|>']  # Example special tokens, adjust as needed
-    )
+# if __name__ == '__main__':
+#     start = time.time()
+#     run_train_bpe(
+#         # input_path=r'D:\Courses and books\cs336\assignment1-basics\data\temp.txt',
+#         input_path= FIXTURES_PATH / "tinystories_sample_5M.txt",
+#         vocab_size=266, # 266
+#         special_tokens=['<|endoftext|>']  # Example special tokens, adjust as needed
+#     )
+
+#     end = time.time()
+
+#     print(f"Time take to complete train bpe {end - start}")
