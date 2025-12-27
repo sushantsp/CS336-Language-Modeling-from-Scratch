@@ -62,7 +62,7 @@ def pretokenization_chunk(text_chunk : str) -> list[list[bytes]]:
     return pre_tokens_bytes
 
 
-def pretokenize_parallel(text_corpus: str, special_token: str, num_workers: int =4) -> list[list[bytes]]:
+def pretokenize_parallel(text_corpus: str, special_token: str, num_workers: int =1) -> list[list[bytes]]:
 
     text_chunks = text_corpus.split(special_token)
     all_tokens = []
@@ -72,18 +72,6 @@ def pretokenize_parallel(text_corpus: str, special_token: str, num_workers: int 
             all_tokens.extend(chunk_token)
 
     return all_tokens
-
-
-def get_pair_freq_counts_old(pre_tokens_bytes: list[list[bytes]]) -> dict[tuple[bytes], int]:
-    # Get a freq count of consecutive pair using each pre token - we maintain the pretoken boundaries
-    freq_count_bp = {}
-
-    for byte_tokens in pre_tokens_bytes:
-        for i in range(len(byte_tokens)):
-            if i < len(byte_tokens) - 1:
-                freq_count_bp[(byte_tokens[i], byte_tokens[i+1])] = freq_count_bp.get((byte_tokens[i], byte_tokens[i+1]), 0) + 1
-    logger.info("Frequency count of each pair is done.")
-    return freq_count_bp
 
 
 def get_pair_freq_counts(pre_tokens_bytes: Counter) -> dict[tuple[bytes], int]:
@@ -98,28 +86,6 @@ def get_pair_freq_counts(pre_tokens_bytes: Counter) -> dict[tuple[bytes], int]:
 
     # logger.info("Frequency count of each pair is done.")
     return freq_count_bp
-
-
-
-def merge_old(old_tokens, top_pair) -> list[list[bytes]]:
-    
-    logger.info(f"Merging a {top_pair} into tokens")
-    # update pre_token_bytes with merges
-
-    new_tokens = []
-    for b_tokens in old_tokens:
-        new_list = []
-        i = 0
-        while i < len(b_tokens):
-            if i < len(b_tokens) - 1 and (b_tokens[i], b_tokens[i+1]) == top_pair:
-                new_list.append(top_pair[0] + top_pair[1])
-                i += 2
-            else:
-                new_list.append(b_tokens[i])
-                i +=1
-        new_tokens.append(new_list)
-    logger.info(f"Merging of pair - {top_pair} into tokens completed.")
-    return new_tokens
 
 
 def merge(old_tokens: Counter, top_pair) -> Counter:
